@@ -41,7 +41,7 @@ angular
       service.getPeriscopeData = function (xml, values) {
         var deferred = $q.defer();
           $http({
-            url: 'http://localhost/xmlproxy.php',
+            url: 'scripts/xmlproxy.php',
             params: {
               url: baseUrl + xml,
               values: values
