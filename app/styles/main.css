@@ -77,12 +77,15 @@ body {
   }
 }
 
-
+.navbar {
+  padding-left: 20px;
+  padding-right: 20px;
+}
 
 .jumbotron {
 -webkit-filter: grayscale(.4);
 line-height: 20px;
-margin-top: 0px;
+margin-top: 55px;
 background-color: #5c8fea !important;
 color: white !important;
 padding-top: 0px !important;
@@ -92,6 +95,7 @@ background: #537ac1;
 background-color: #5c8fea;
 background-image: -webkit-linear-gradient(#5c8fea,#537ac1);
 background-image: linear-gradient(to bottom,#5c8fea,#537ac1);
+
 }
 
 .jumbotron .header {
@@ -102,6 +106,7 @@ width: 100%;
 background-position: 30% 50%;
 background: url(../images/Skyline1.png) bottom no-repeat;
 -webkit-filter: grayscale(.4);
+
 }
 
 
@@ -134,6 +139,7 @@ li {
 .btn-group {
   margin-bottom: 10px;
 }
+
 
 
 

@@ -1,4 +1,4 @@
-<div class="row">
+<section class="row" id="stats">
   <h1><span style="font-size: 40px;float:left; margin-right:10px" class="ion-information-circled"/>Overall Statistics</h1>
   <div class="btn-group">
         <label class="btn btn-default" ng-model="overallRange" btn-radio="'today'">Today</label>
@@ -17,8 +17,8 @@
       <tr><th>Total Number of Charges</th><td>{{overall.numberOfCharges | number: 0}}</td></tr>                      
     </tbody>
   </table>
-</div>
-<div class="row">
+</section>
+<section class="row" id="rankings">
   <h1><span style="font-size: 40px;float:left; margin-right:10px" class="ion-connection-bars"/>Station Rankings</h1>
   <div class="col-sm-4">
   <p>{{rank.message}}</p>
@@ -39,8 +39,8 @@
         <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'yearToDate'">This Year</label>         
     </div>      
   </div>
-</div>
-<div class="row">
+</section>
+<section class="row" id="stations">
   <h1><span style="font-size: 40px;float:left; margin-right:10px" class="ion-search"/>Station Focus</h1>
   <div class="col-sm-8">
     <leaflet tiles="tiles" center="center" geojson="geojson"></leaflet>
@@ -61,7 +61,7 @@
 
   </div>
 
-</div>
+</section>
 <div class="row" ng-show="station">
   <h2><span style="font-size: 40px;float:left; margin-right:10px" ng-class="{'ion-flash': station.status === 'charging', 'ion-plus': station.status === 'connected', 'ion-checkmark': station.status === 'available'}"/>{{station.name}}</h2>
   <p class="lead">{{station.address}}</p>

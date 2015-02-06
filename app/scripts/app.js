@@ -18,7 +18,9 @@ angular
     'ngTouch',
     'leaflet-directive',
     'tc.chartjs',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'angular-loading-bar',
+    'duScroll'
   ])
   .config(function ($routeProvider) {
     $routeProvider

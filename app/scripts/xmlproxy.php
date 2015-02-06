@@ -7,7 +7,7 @@
     
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1); // --data-binary
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: text/xml','Accept-Encoding: gzip, deflate']); // -H
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml','Accept-Encoding: gzip, deflate')); // -H
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $values);  
     curl_setopt( $ch, CURLOPT_ENCODING, '' ); 

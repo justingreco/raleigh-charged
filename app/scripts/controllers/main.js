@@ -8,7 +8,7 @@
  * Controller of the chargedApp
  */
 angular.module('chargedApp')
-  .controller('MainCtrl', function ($scope, $interval, $filter, dataFactory) {
+  .controller('MainCtrl', function ($scope, $interval, $filter, $document, dataFactory) {
     $scope.tiles = {
 	    url: "http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.png",
 	    options: {
@@ -23,87 +23,33 @@ angular.module('chargedApp')
     };
     $scope.barOptions =  {
 	  scaleLabel : "<%= Number(value) + ' kWh'%>",
-      // Sets the chart to be responsive
       responsive: true,
-
-      //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
       scaleBeginAtZero : true,
-
-      //Boolean - Whether grid lines are shown across the chart
       scaleShowGridLines : true,
-
-      //String - Colour of the grid lines
       scaleGridLineColor : "rgba(0,0,0,.05)",
-
-      //Number - Width of the grid lines
       scaleGridLineWidth : 1,
-
-      //Boolean - If there is a stroke on each bar
       barShowStroke : true,
-
-      //Number - Pixel width of the bar stroke
       barStrokeWidth : 2,
-
-      //Number - Spacing between each of the X value sets
       barValueSpacing : 5,
-
-      //Number - Spacing between data sets within X values
-      barDatasetSpacing : 1,
-
-      //String - A legend template
-      legendTemplate : '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+      barDatasetSpacing : 1
     };
 
     $scope.lineOptions =  {
+      showXLabels: 10,
       scaleLabel : "<%= Number(value) + ' kWh'%>",
-	  showXLabels: 10,
-      // Sets the chart to be responsive
-      responsive: true,
-
-      ///Boolean - Whether grid lines are shown across the chart
+	  responsive: true,
       scaleShowGridLines : true,
-
-      //String - Colour of the grid lines
       scaleGridLineColor : "rgba(0,0,0,.05)",
-
-      //Number - Width of the grid lines
       scaleGridLineWidth : 1,
-
-      //Boolean - Whether the line is curved between points
       bezierCurve : true,
-
-      //Number - Tension of the bezier curve between points
       bezierCurveTension : 0.4,
-
-      //Boolean - Whether to show a dot for each point
       pointDot : true,
-
-      //Number - Radius of each point dot in pixels
       pointDotRadius : 4,
-
-      //Number - Pixel width of point dot stroke
       pointDotStrokeWidth : 1,
-
-      //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
       pointHitDetectionRadius : 1,
-
-      //Boolean - Whether to show a stroke for datasets
       datasetStroke : true,
-
-      //Number - Pixel width of dataset stroke
       datasetStrokeWidth : 2,
-
-      //Boolean - Whether to fill the dataset with a colour
-      datasetFill : true,
-
-      // Function - on animation progress
-      onAnimationProgress: function(){},
-
-      // Function - on animation complete
-      onAnimationComplete: function(){},
-
-      //String - A legend template
-      legendTemplate : '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+      datasetFill : true
     };    
     $scope.dateRange = {range: 'today', minutes: 900000}
     $scope.overallRange = 'today';
@@ -115,10 +61,23 @@ angular.module('chargedApp')
    	getOverallStats();
    	getRankings();
 
-   	$scope.$watch('overallRange', getOverallStats);
+   	$scope.$watch('overallRange', function (newVal, oldVal) {
+   		if (newVal != oldVal) {
+   			getOverallStats();
+   		}
+   	});
 
-   	$scope.$watch('rank', getRankings);
-   	$scope.$watch('rankPeriod', getRankings);
+   	$scope.$watch('rank', function (newVal, oldVal) {
+   		if (newVal != oldVal) {
+   			getRankings();
+   		}
+   	});
+
+   	$scope.$watch('rankPeriod', function (newVal, oldVal) {
+   		if (newVal != oldVal) {
+   			getRankings();
+   		}
+   	});
 
    	function getRankings () {
    		$scope.barOptions.scaleLabel = "<%= Number(value) + ' " + $scope.rank.units + "'%>";
@@ -129,7 +88,6 @@ angular.module('chargedApp')
 	    		ranks.push({name: r.$.name, value: r.$.value});
 	    	});
 	    	ranks = $filter('orderBy')(ranks, 'value', true);
-	    	console.log(ranks);
 			$scope.barData = {
 			      labels: [],
 			      datasets: [
@@ -198,10 +156,6 @@ angular.module('chargedApp')
 	    				$scope.lineData.labels.push(parseInt(ts[1]) + 1 + '/' + '1');
 	    			break;
 	    		}
-	    		//} else {
-	    		//	$scope.data.labels.push('');
-	    		//}
-	    		
 	    		$scope.lineData.datasets[0].data.push(r.sum);
 	    	});
 	    });
@@ -257,4 +211,9 @@ angular.module('chargedApp')
  			getStatsForStation($scope.station.ord, $scope.dateRange.range, $scope.dateRange.minutes );
     	}
     });
+
+    $scope.goTo = function (id) {
+      $document.scrollTo(angular.element(document.getElementById(id)), 60, 1000);
+    };
+
   });
