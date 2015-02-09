@@ -5,7 +5,7 @@
         <label class="btn btn-default" ng-model="overallRange" btn-radio="'week'">This Week</label>
         <label class="btn btn-default" ng-model="overallRange" btn-radio="'month'">This Month</label>
         <label class="btn btn-default" ng-model="overallRange" btn-radio="'year'">This Year</label>         
-    </div>    
+    </div>  
   <table class="table table-striped">
     <tbody>
       <tr><th>EV Stations Online</th><td>{{overall.stationsOnline}}</td></tr>
@@ -20,7 +20,7 @@
 </section>
 <section class="row" id="rankings">
   <h1><span style="font-size: 40px;float:left; margin-right:10px" class="ion-connection-bars"/>Station Rankings</h1>
-  <div class="col-sm-4">
+  <div class="col-sm-3">
   <p>{{rank.message}}</p>
   <div class="btn-group-vertical">
         <label class="btn btn-default" ng-model="rank" btn-radio="{units: 'kWh', message: 'Ranks the total energy delivered to charged cars over the selected period of time in kilowatt hours (kWh).', type: '0'}">Power Delivered</label>
@@ -29,32 +29,38 @@
         <label class="btn btn-default" ng-model="rank" btn-radio="{units: '%', message: 'Ranks the percent uptime that each station was online and functional for the selected period of time.', type: '3'}">Station Up Time</label>         
     </div>  
   </div>
-  <div class="col-sm-8">
+  <div class="col-sm-9">
     <canvas tc-chartjs-bar chart-data="barData" chart-options="barOptions" width="600" height="300"></canvas>
 
   <div class="btn-group">
         <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'today'">Today</label>
         <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'weekToDate'">This Week</label>
         <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'monthToDate'">This Month</label>
-        <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'yearToDate'">This Year</label>         
-    </div>      
+        <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'yearToDate'">This Year</label>
+        <label class="btn btn-default" ng-model="rankPeriod" btn-radio="'custom'">Custom</label>      
+    </div>
+    <div ng-show="rankPeriod === 'custom'">
+      <datetimepicker min-date="minDate" show-weeks="false" hour-step="1" minute-step="15" ng-model="rankStart" show-meridian="true" date-format="dd-MMM-yyyy" date-options="dateOptions" date-disabled="disabled(rankStart, mode)" readonly-time="false"></datetimepicker>
+      <strong>TO</strong>
+      <datetimepicker min-date="minDate" show-weeks="false" hour-step="1" minute-step="15" ng-model="rankEnd" show-meridian="true" date-format="dd-MMM-yyyy" date-options="dateOptions" date-disabled="disabled(rankEnd, mode)" readonly-time="false"></datetimepicker>
+    </div>
   </div>
 </section>
 <section class="row" id="stations">
   <h1><span style="font-size: 40px;float:left; margin-right:10px" class="ion-search"/>Station Focus</h1>
   <div class="col-sm-8">
-    <leaflet tiles="tiles" center="center" geojson="geojson"></leaflet>
+    <leaflet tiles="tiles" center="center" geojson="geojson" defaults="defaults" event-broadcast="events"></leaflet>
   </div>
   <div class="col-sm-4">
     <center><p class="lead">Select A Station</p>
     <div class="col-xs-6">
       <ul>
-        <li ng-if="$even" ng-model="station" ng-repeat="station in stations" ng-click="stationSelected(station)"><button class="btn" ng-class="{'btn-success': station.status === 'connected', 'btn-charging': station.status === 'charging'}">{{station.name}}</button></li>
+        <li ng-if="$even" ng-model="station" ng-repeat="station in stations" ng-click="stationSelected(station)"><button class="btn btn-sm pull-left" ng-class="{'btn-success': station.status === 'connected', 'btn-charging': station.status === 'charging', 'btn-available': station.status === 'available'}"><span ng-class="{'ion-flash': station.status === 'charging', 'ion-plus': station.status === 'connected', 'ion-checkmark': station.status === 'available'}"/>{{station.name}}</button></li>
       </ul>
     </div>
     <div class="col-xs-6">
       <ul>
-        <li ng-if="$odd" ng-model="station" ng-repeat="station in stations" ng-click="stationSelected(station)"><button class="btn" ng-class="{'btn-success': station.status === 'connected', 'btn-charging': station.status === 'charging'}">{{station.name}}</button></li>
+        <li ng-if="$odd" ng-model="station" ng-repeat="station in stations" ng-click="stationSelected(station)"><button class="btn btn-sm pull-left" ng-class="{'btn-success': station.status === 'connected', 'btn-charging': station.status === 'charging', 'btn-available': station.status === 'available'}"><span ng-class="{'ion-flash': station.status === 'charging', 'ion-plus': station.status === 'connected', 'ion-checkmark': station.status === 'available'}"/>{{station.name}}</button></li>
       </ul>
     </div>
     </center>
@@ -70,6 +76,12 @@
         <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'today', minutes: 900000}">Today</label>
         <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'weekToDate', minutes: 900000}">This Week</label>
         <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'monthToDate', minutes: 86400000}">This Month</label>
-        <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'yearToDate', minutes: 'M'}">This Year</label>         
-    </div>  
+        <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'yearToDate', minutes: 'M'}">This Year</label>        
+        <label class="btn btn-default" ng-model="dateRange" btn-radio="{range: 'custom', minutes: 'M'}">Custom</label>      
+    </div>
+    <div ng-show="dateRange.range === 'custom'">
+      <datetimepicker min-date="minDate" show-weeks="false" hour-step="1" minute-step="15" ng-model="focusStart" show-meridian="true" date-format="dd-MMM-yyyy" date-options="dateOptions" date-disabled="disabled(focusStart, mode)" readonly-time="false"></datetimepicker>
+      <strong>TO</strong>
+      <datetimepicker min-date="minDate" show-weeks="false" hour-step="1" minute-step="15" ng-model="focusEnd" show-meridian="true" date-format="dd-MMM-yyyy" date-options="dateOptions" date-disabled="disabled(focusEnd, mode)" readonly-time="false"></datetimepicker>
+    </div>
 </div>

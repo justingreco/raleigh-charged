@@ -20,7 +20,7 @@ angular
     'tc.chartjs',
     'ui.bootstrap',
     'angular-loading-bar',
-    'duScroll'
+    'duScroll','ui.bootstrap.datetimepicker'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -52,7 +52,7 @@ angular
             deferred.resolve(data);
           });   
         return deferred.promise;
-      }
+      };
 
       service.getLocations = function () {
         var deferred = $q.defer();
@@ -62,8 +62,6 @@ angular
           deferred.resolve(geojson);
         });
         return deferred.promise;
-      }
-
-
+      };
     return service;
   });
